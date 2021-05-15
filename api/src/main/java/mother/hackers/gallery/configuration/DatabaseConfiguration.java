@@ -1,4 +1,4 @@
-package mother.hackers.gallery.configurations;
+package mother.hackers.gallery.configuration;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+<body>
+
+<div class="header-body">
+    <div class="left">
+        <a href="/search">Search</a>
+        <a href="/index">Index</a>
+    </div>
+    <div class="right">
+
+    </div>
+</div>
+
+<h2>Login</h2>
+
+<form th:action="@{/api/login}" th:object="${loginForm}" method="POST">
+    <table>
+        <tr>
+            <td>Email</td>
+            <td><input type="text" th:field="*{email}" /> </td>
+            <td>
+                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="password" th:field="*{password}" /> </td>
+            <td>
+                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" ></span>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <input type="submit" value="Submit" />
+                <a th:href="@{/index}">Cancel</a>
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <p>New user? <a href="/" th:href="@{/registration}">Register here</a></p>
+            </td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

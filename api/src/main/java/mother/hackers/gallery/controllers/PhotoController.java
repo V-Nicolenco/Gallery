@@ -1,10 +1,12 @@
 package mother.hackers.gallery.controllers;
 
 import mother.hackers.gallery.photo.PhotoService;
+import mother.hackers.gallery.photo.dto.ImageData;
 import mother.hackers.gallery.photo.dto.PhotoDto;
-import mother.hackers.gallery.photo.dto.SavePhotoDto;
 import mother.hackers.gallery.photo.dto.UpdateDescriptionDto;
 import mother.hackers.gallery.security.AuthenticationUser;
+import mother.hackers.gallery.utils.MultipartFileUtils;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,12 +32,13 @@ public class PhotoController {
     }
 
     @PutMapping
-    public PhotoDto savePhoto(@RequestBody SavePhotoDto dto,
+    public PhotoDto savePhoto(@RequestBody MultipartFile file,
                               @AuthenticationPrincipal AuthenticationUser user) {
-        return photoService.savePhoto(dto, user.getId());
+        ImageData data = MultipartFileUtils.getData(file);
+        return photoService.savePhoto(data, user.getId());
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
     public List<PhotoDto> getAllAlbumPhotos(@PathVariable("albumId") long albumId,
                                         @AuthenticationPrincipal AuthenticationUser user) {
         return photoService.getAllByAlbumId(albumId, user.getId());
