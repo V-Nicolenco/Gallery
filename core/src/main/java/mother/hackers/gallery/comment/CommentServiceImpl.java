@@ -2,6 +2,7 @@ package mother.hackers.gallery.comment;
 
 import mother.hackers.gallery.comment.dto.CommentDto;
 import mother.hackers.gallery.comment.dto.CreateCommentDto;
+import mother.hackers.gallery.comment.dto.EditCommentDto;
 import mother.hackers.gallery.exceptions.ForbiddenException;
 import mother.hackers.gallery.exceptions.NotFoundException;
 import mother.hackers.gallery.photo.Photo;
@@ -33,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDto> addComment(CreateCommentDto dto, long photoId, long userId) {
-        if (!photoRepository.isOpen(photoId)) {
+        if (!photoRepository.isPublic(photoId)) {
             throw new NotFoundException("Comments are closed!");
         }
 
@@ -53,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDto> editComment(String text, long photoId, long commentId, long userId) {
+    public List<CommentDto> editComment(EditCommentDto dto, long photoId, long commentId, long userId) {
         if (!commentRepository.existsById(commentId)) {
             throw new NotFoundException("Comment not found!");
         }
@@ -61,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
         if (commentRepository.isAuthor(commentId, userId)) {
             commentRepository.findById(commentId)
                     .ifPresent(comment -> {
-                        comment.setText(text);
+                        comment.setText(dto.getText());
                         commentRepository.save(comment);
                     });
 
@@ -79,7 +80,7 @@ public class CommentServiceImpl implements CommentService {
         if (commentRepository.isAuthor(commentId, userId)) {
             commentRepository.deleteById(commentId);
 
-            if (photoRepository.isOpen(photoId)) {
+            if (photoRepository.isPublic(photoId)) {
                 return commentRepository.getCommentsByPhotoId(photoId)
                         .stream()
                         .map(mapper::toDto)

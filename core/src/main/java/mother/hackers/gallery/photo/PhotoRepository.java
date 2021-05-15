@@ -13,6 +13,6 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
     boolean isOwner(@Param("photoId") long photoId, @Param("userId") long userId);
 
     @Query("SELECT p.isOpen FROM Photo p WHERE p.id = :photoId")
-    boolean isOpen(@Param("photoId") long photoId);
+    boolean isPublic(@Param("photoId") long photoId);
 
 }

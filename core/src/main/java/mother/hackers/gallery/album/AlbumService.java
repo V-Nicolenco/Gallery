@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface AlbumService {
 
-    AlbumDto createAlbum(CreateAlbumDto dto);
+    AlbumDto createAlbum(CreateAlbumDto dto, long userId);
 
     AlbumDto getAlbum(long albumId, long userId);
 
     List<AlbumDto> getMyAlbums(long userId);
 
-    List<AlbumDto> getUserOpenAlbums(long userId);
+    List<AlbumDto> getUserPublicAlbums(long userId);
 
-    List<AlbumDto> getOpenAlbums();
+    List<AlbumDto> getPublicAlbums();
 
     void deleteByAlbumId(long albumId, long userId);
 }

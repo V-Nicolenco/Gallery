@@ -4,6 +4,8 @@ import mother.hackers.gallery.album.dto.AlbumDto;
 import mother.hackers.gallery.album.dto.CreateAlbumDto;
 import mother.hackers.gallery.exceptions.ForbiddenException;
 import mother.hackers.gallery.exceptions.NotFoundException;
+import mother.hackers.gallery.user.User;
+import mother.hackers.gallery.user.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,14 +17,19 @@ public class AlbumServiceImpl implements AlbumService {
     private static final AlbumMapper mapper = AlbumMapper.INSTANCE;
 
     private final AlbumRepository albumRepository;
+    private final UserRepository userRepository;
 
-    public AlbumServiceImpl(AlbumRepository albumRepository) {
+    public AlbumServiceImpl(AlbumRepository albumRepository, UserRepository userRepository) {
         this.albumRepository = albumRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public AlbumDto createAlbum(CreateAlbumDto dto) {
+    public AlbumDto createAlbum(CreateAlbumDto dto, long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User could not be found"));
         Album newAlbum = mapper.toEntity(dto);
+        newAlbum.setOwner(user);
         Album album = albumRepository.save(newAlbum);
 
         return mapper.toDto(album);
@@ -50,15 +57,15 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public List<AlbumDto> getUserOpenAlbums(long userId) {
+    public List<AlbumDto> getUserPublicAlbums(long userId) {
         return albumRepository.findOpenUserAlbumsByUserId(userId).stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<AlbumDto> getOpenAlbums() {
-        return albumRepository.findOpenAlbums().stream()
+    public List<AlbumDto> getPublicAlbums() {
+        return albumRepository.findPublicAlbums().stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }

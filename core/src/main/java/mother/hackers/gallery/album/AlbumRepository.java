@@ -17,7 +17,7 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     List<Album> findOpenUserAlbumsByUserId(@Param("userId") long userId);
 
     @Query("SELECT * FROM Album a WHERE a.isPublic = true")
-    List<Album> findOpenAlbums();
+    List<Album> findPublicAlbums();
 
     @Query("SELECT CASE WHEN COUNT(a) > 0 THEN true ELSE false END " +
             "FROM Album a WHERE a.id = :albumId and a.owner.id = :userId")

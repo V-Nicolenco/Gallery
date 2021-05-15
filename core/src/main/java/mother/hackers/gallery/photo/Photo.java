@@ -22,7 +22,7 @@ public class Photo {
     private long id;
     private String data;
     private String description;
-    private boolean isOpen;
+    private boolean isPublic;
     @ManyToOne
     private User owner;
     @OneToMany
