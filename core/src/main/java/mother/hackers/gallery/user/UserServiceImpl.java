@@ -3,11 +3,11 @@ package mother.hackers.gallery.user;
 import mother.hackers.gallery.exceptions.NotFoundException;
 import mother.hackers.gallery.user.dto.RegistrationUserDto;
 import mother.hackers.gallery.user.dto.UserDto;
-
-import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 import static java.lang.String.format;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private static final UserMapper mapper = UserMapper.INSTANCE;

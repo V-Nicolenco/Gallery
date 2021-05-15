@@ -22,4 +22,7 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     @Query("SELECT CASE WHEN COUNT(a) > 0 THEN true ELSE false END " +
             "FROM Album a WHERE a.id = :albumId and a.owner.id = :userId")
     boolean isOwner(@Param("albumId") long albumId, @Param("userId") long userId);
+
+    @Query("SELECT a.isPublic FROM Album a WHERE a.id = :albumId")
+    boolean isPublic(@Param("albumId") long albumId);
 }

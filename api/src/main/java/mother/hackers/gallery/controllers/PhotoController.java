@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/web-api/gallery/albums/{albumId}/photos")
 public class PhotoController {
@@ -30,6 +32,12 @@ public class PhotoController {
     public PhotoDto savePhoto(@RequestBody SavePhotoDto dto,
                               @AuthenticationPrincipal AuthenticationUser user) {
         return photoService.savePhoto(dto, user.getId());
+    }
+
+    @GetMapping
+    public List<PhotoDto> getAllAlbumPhotos(@PathVariable("albumId") long albumId,
+                                        @AuthenticationPrincipal AuthenticationUser user) {
+        return photoService.getAllByAlbumId(albumId, user.getId());
     }
 
     @GetMapping("/{photoId}")

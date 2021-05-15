@@ -1,5 +1,7 @@
 package mother.hackers.gallery.photo;
 
+import mother.hackers.gallery.album.AlbumRepository;
+import mother.hackers.gallery.album.AlbumService;
 import mother.hackers.gallery.exceptions.ForbiddenException;
 import mother.hackers.gallery.exceptions.NotFoundException;
 import mother.hackers.gallery.photo.dto.PhotoDto;
@@ -9,15 +11,20 @@ import mother.hackers.gallery.user.User;
 import mother.hackers.gallery.user.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class PhotoServiceImpl implements PhotoService {
 
     private static final PhotoMapper mapper = PhotoMapper.INSTANCE;
 
+    private final AlbumRepository albumRepository;
     private final PhotoRepository photoRepository;
     private final UserRepository userRepository;
 
-    public PhotoServiceImpl(PhotoRepository photoRepository, UserRepository userRepository) {
+    public PhotoServiceImpl(AlbumRepository albumRepository, PhotoRepository photoRepository, UserRepository userRepository) {
+        this.albumRepository = albumRepository;
         this.photoRepository = photoRepository;
         this.userRepository = userRepository;
     }
@@ -44,6 +51,23 @@ public class PhotoServiceImpl implements PhotoService {
             return mapper.toDto(photo);
         } else {
             throw new ForbiddenException("This photo is private and only owner can see this photo");
+        }
+    }
+
+    @Override
+    public List<PhotoDto> getAllByAlbumId(long albumId, long userId) {
+        if (albumRepository.isOwner(albumId, userId)) {
+            return photoRepository.findAllPhotosByAlbumId(albumId)
+                    .stream()
+                    .map(mapper::toDto)
+                    .collect(Collectors.toList());
+        } else if (albumRepository.isPublic(albumId)) {
+            return photoRepository.findAllPublicPhotosByAlbumId(albumId)
+                    .stream()
+                    .map(mapper::toDto)
+                    .collect(Collectors.toList());
+        } else {
+            throw new ForbiddenException("This album is private and only owner can see photos in it");
         }
     }
 
