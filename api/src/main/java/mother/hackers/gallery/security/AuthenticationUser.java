@@ -1,6 +1,7 @@
 package mother.hackers.gallery.security;
 
 import lombok.Getter;
+import lombok.Setter;
 import mother.hackers.gallery.user.Role;
 import mother.hackers.gallery.user.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,19 +12,13 @@ import java.util.Collection;
 import java.util.Set;
 
 @Getter
+@Setter
 public class AuthenticationUser implements UserDetails {
 
-    private final long id;
-    private final String email;
-    private final String passwordHash;
-    private final Role role;
-
-    public AuthenticationUser(User user) {
-        this.id = user.getId();
-        this.email = user.getEmail();
-        this.passwordHash = user.getPasswordHash();
-        this.role = user.getRole();
-    }
+    private long id;
+    private String email;
+    private String passwordHash;
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
