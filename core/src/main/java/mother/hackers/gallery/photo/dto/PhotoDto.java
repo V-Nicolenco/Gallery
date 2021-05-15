@@ -12,7 +12,7 @@ import java.util.List;
 public class PhotoDto {
 
     private long id;
-    private String data;
+    private ImageData data;
     private String description;
     private boolean isPublic;
     private UserDto owner;

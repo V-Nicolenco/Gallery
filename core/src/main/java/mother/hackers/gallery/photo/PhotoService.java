@@ -1,14 +1,14 @@
 package mother.hackers.gallery.photo;
 
+import mother.hackers.gallery.photo.dto.ImageData;
 import mother.hackers.gallery.photo.dto.PhotoDto;
-import mother.hackers.gallery.photo.dto.SavePhotoDto;
 import mother.hackers.gallery.photo.dto.UpdateDescriptionDto;
 
 import java.util.List;
 
 public interface PhotoService {
 
-    PhotoDto savePhoto(SavePhotoDto dto, long userId);
+    PhotoDto savePhoto(ImageData data, long userId);
 
     PhotoDto getPhotoById(long photoId, long userId);
 

@@ -1,11 +1,10 @@
 package mother.hackers.gallery.photo;
 
 import mother.hackers.gallery.album.AlbumRepository;
-import mother.hackers.gallery.album.AlbumService;
 import mother.hackers.gallery.exceptions.ForbiddenException;
 import mother.hackers.gallery.exceptions.NotFoundException;
+import mother.hackers.gallery.photo.dto.ImageData;
 import mother.hackers.gallery.photo.dto.PhotoDto;
-import mother.hackers.gallery.photo.dto.SavePhotoDto;
 import mother.hackers.gallery.photo.dto.UpdateDescriptionDto;
 import mother.hackers.gallery.user.User;
 import mother.hackers.gallery.user.UserRepository;
@@ -30,11 +29,12 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     @Override
-    public PhotoDto savePhoto(SavePhotoDto dto, long userId) {
+    public PhotoDto savePhoto(ImageData data, long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User could not be found"));
 
-        Photo newPhoto = mapper.toEntity(dto);
+        Photo newPhoto = new Photo();
+        newPhoto.setData(data);
         newPhoto.setOwner(user);
         Photo savedPhoto = photoRepository.save(newPhoto);
 

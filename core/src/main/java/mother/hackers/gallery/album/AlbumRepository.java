@@ -10,13 +10,13 @@ import java.util.List;
 @Repository
 public interface AlbumRepository extends JpaRepository<Album, Long> {
 
-    @Query("SELECT * FROM Album a WHERE a.owner.id = :userId")
+    @Query("SELECT a FROM Album a WHERE a.owner.id = :userId")
     List<Album> findAlbumsByUserId(@Param("userId") long userId);
 
-    @Query("SELECT * FROM Album a WHERE a.owner.id = :userId and a.isPublic = true")
+    @Query("SELECT a FROM Album a WHERE a.owner.id = :userId and a.isPublic = true")
     List<Album> findOpenUserAlbumsByUserId(@Param("userId") long userId);
 
-    @Query("SELECT * FROM Album a WHERE a.isPublic = true")
+    @Query("SELECT a FROM Album a WHERE a.isPublic = true")
     List<Album> findPublicAlbums();
 
     @Query("SELECT CASE WHEN COUNT(a) > 0 THEN true ELSE false END " +
