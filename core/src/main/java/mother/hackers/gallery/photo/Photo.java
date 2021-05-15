@@ -1,7 +1,8 @@
-package mother.hackers.gallery.entity;
+package mother.hackers.gallery.photo;
 
 import lombok.Getter;
 import lombok.Setter;
+import mother.hackers.gallery.comment.Comment;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

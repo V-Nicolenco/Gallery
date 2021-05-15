@@ -1,4 +1,5 @@
 rootProject.name = 'Gallery'
+
 include 'api'
 include 'core'
 
