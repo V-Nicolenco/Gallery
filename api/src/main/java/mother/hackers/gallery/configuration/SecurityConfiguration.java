@@ -33,7 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.exceptionHandling().authenticationEntryPoint(new Http403ForbiddenEntryPoint());
 
         http.authorizeRequests()
-                .mvcMatchers("/login", "/registration", "/api/login", "/api/registration").permitAll()
+                .mvcMatchers("/login", "/registration", "/web-api/login", "/web-api/registration").permitAll()
                 .anyRequest().authenticated();
 
     }

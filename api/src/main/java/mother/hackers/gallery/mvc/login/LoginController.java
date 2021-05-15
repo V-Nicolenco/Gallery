@@ -32,7 +32,7 @@ public class LoginController {
         return "login";
     }
 
-    @PostMapping("/api/login")
+    @PostMapping("/web-api/login")
     public String register(@ModelAttribute("loginForm") @Validated LoginDto login,
                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

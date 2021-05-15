@@ -41,7 +41,7 @@ public class RegistrationController {
         return "registration";
     }
 
-    @PostMapping("/registration")
+    @PostMapping("/web-api/registration")
     public String register(@ModelAttribute("registrationForm") @Validated RegistrationUserDto registrationDto,
                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
