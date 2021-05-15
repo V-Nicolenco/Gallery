@@ -41,7 +41,7 @@ public class LoginController {
 
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        return "redirect:/index";
+        return "redirect:/gallery";
     }
 
     @InitBinder

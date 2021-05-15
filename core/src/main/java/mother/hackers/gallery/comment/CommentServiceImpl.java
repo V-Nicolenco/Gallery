@@ -66,10 +66,14 @@ public class CommentServiceImpl implements CommentService {
                         commentRepository.save(comment);
                     });
 
-            return commentRepository.getCommentsByPhotoId(photoId)
-                    .stream()
-                    .map(mapper::toDto)
-                    .collect(Collectors.toList());
+            if (photoRepository.isPublic(photoId)) {
+                return commentRepository.getCommentsByPhotoId(photoId)
+                        .stream()
+                        .map(mapper::toDto)
+                        .collect(Collectors.toList());
+            } else {
+                return Collections.emptyList();
+            }
         } else {
             throw new ForbiddenException("You do not have access to edit this comment");
         }
