@@ -4,6 +4,7 @@ import mother.hackers.gallery.album.AlbumService;
 import mother.hackers.gallery.album.dto.AlbumDto;
 import mother.hackers.gallery.album.dto.CreateAlbumDto;
 import mother.hackers.gallery.security.AuthenticationUser;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,19 +26,21 @@ public class AlbumController {
     }
 
     @PutMapping("/albums")
-    public AlbumDto createAlbum(@RequestBody CreateAlbumDto dto, AuthenticationUser user) {
+    public AlbumDto createAlbum(@RequestBody CreateAlbumDto dto,
+                                @AuthenticationPrincipal AuthenticationUser user) {
         long userId = user.getId();
         return albumService.createAlbum(dto, userId);
     }
 
     @GetMapping("/albums/{albumId}")
-    public AlbumDto getAlbum(@PathVariable("albumId") long albumId, AuthenticationUser user) {
+    public AlbumDto getAlbum(@PathVariable("albumId") long albumId,
+                             @AuthenticationPrincipal AuthenticationUser user) {
         long userId = user.getId();
         return albumService.getAlbum(albumId, userId);
     }
 
     @GetMapping("/albums/my")
-    public List<AlbumDto> getMyAlbums(AuthenticationUser user) {
+    public List<AlbumDto> getMyAlbums(@AuthenticationPrincipal AuthenticationUser user) {
         long userId = user.getId();
         return albumService.getMyAlbums(userId);
     }
@@ -53,7 +56,8 @@ public class AlbumController {
     }
 
     @DeleteMapping("/albums/{albumId}")
-    public void deleteAlbum(@PathVariable("albumId") long albumId, AuthenticationUser user) {
+    public void deleteAlbum(@PathVariable("albumId") long albumId,
+                            @AuthenticationPrincipal AuthenticationUser user) {
          albumService.deleteByAlbumId(albumId, user.getId());
     }
 }

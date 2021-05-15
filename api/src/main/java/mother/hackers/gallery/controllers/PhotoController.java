@@ -5,6 +5,7 @@ import mother.hackers.gallery.photo.dto.PhotoDto;
 import mother.hackers.gallery.photo.dto.SavePhotoDto;
 import mother.hackers.gallery.photo.dto.UpdateDescriptionDto;
 import mother.hackers.gallery.security.AuthenticationUser;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,31 +27,34 @@ public class PhotoController {
     }
 
     @PutMapping
-    public PhotoDto savePhoto(@RequestBody SavePhotoDto dto, AuthenticationUser user) {
+    public PhotoDto savePhoto(@RequestBody SavePhotoDto dto,
+                              @AuthenticationPrincipal AuthenticationUser user) {
         return photoService.savePhoto(dto, user.getId());
     }
 
     @GetMapping("/{photoId}")
-    public PhotoDto getPhoto(@PathVariable("photoId") long photoId, AuthenticationUser user) {
+    public PhotoDto getPhoto(@PathVariable("photoId") long photoId,
+                             @AuthenticationPrincipal AuthenticationUser user) {
         return photoService.getPhotoById(photoId, user.getId());
     }
 
     @PostMapping("/{photoId}/update-status")
     public PhotoDto changePhotoOpenStatus(@PathVariable("photoId") long photoId,
-                                     @RequestParam("openStatus") boolean isOpen,
-                                     AuthenticationUser user) {
+                                          @RequestParam("openStatus") boolean isOpen,
+                                          @AuthenticationPrincipal AuthenticationUser user) {
         return photoService.changeOpenStatus(isOpen, photoId, user.getId());
     }
 
     @PostMapping("/{photoId}/update-description")
     public PhotoDto changePhotoDescription(@PathVariable("photoId") long photoId,
-                                      @RequestBody UpdateDescriptionDto dto,
-                                      AuthenticationUser user) {
+                                           @RequestBody UpdateDescriptionDto dto,
+                                           @AuthenticationPrincipal AuthenticationUser user) {
         return photoService.updateDescription(dto, photoId, user.getId());
     }
 
     @DeleteMapping("/{photoId}")
-    public void deletePhoto(@PathVariable("photoId") long photoId, AuthenticationUser user) {
+    public void deletePhoto(@PathVariable("photoId") long photoId,
+                            @AuthenticationPrincipal AuthenticationUser user) {
         photoService.deletePhotoById(photoId, user.getId());
     }
 }

@@ -5,6 +5,7 @@ import mother.hackers.gallery.comment.dto.CommentDto;
 import mother.hackers.gallery.comment.dto.CreateCommentDto;
 import mother.hackers.gallery.comment.dto.EditCommentDto;
 import mother.hackers.gallery.security.AuthenticationUser;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +29,7 @@ public class CommentController {
     @PutMapping
     public List<CommentDto> addComment(@RequestBody CreateCommentDto dto,
                                        @PathVariable("photoId") long photoId,
-                                       AuthenticationUser user) {
+                                       @AuthenticationPrincipal AuthenticationUser user) {
         return commentService.addComment(dto, photoId, user.getId());
     }
 
@@ -36,14 +37,14 @@ public class CommentController {
     public List<CommentDto> editComment(@PathVariable("commentId") long commentId,
                                         @PathVariable("photoId") long photoId,
                                         @RequestBody EditCommentDto dto,
-                                        AuthenticationUser user) {
+                                        @AuthenticationPrincipal AuthenticationUser user) {
         return commentService.editComment(dto, photoId, commentId, user.getId());
     }
 
     @DeleteMapping("/{commentId}")
     public List<CommentDto> deletePhoto(@PathVariable("commentId") long commentId,
                                         @PathVariable("photoId") long photoId,
-                                        AuthenticationUser user) {
+                                        @AuthenticationPrincipal AuthenticationUser user) {
         return commentService.deleteComment(photoId, commentId, user.getId());
     }
 }
