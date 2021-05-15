@@ -36,6 +36,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/login", "/registration", "/web-api/login", "/web-api/registration").permitAll()
                 .anyRequest().authenticated();
 
+        http.formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/index", true)
+                .and()
+                .rememberMe()
+                .tokenValiditySeconds(604800)
+                .rememberMeParameter("remember-me")
+                .and()
+                .logout()
+                .logoutSuccessUrl("/login")
+                .logoutUrl("/logout");
     }
 
     @Override
