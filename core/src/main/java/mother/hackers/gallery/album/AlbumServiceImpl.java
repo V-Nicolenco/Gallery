@@ -68,7 +68,8 @@ public class AlbumServiceImpl implements AlbumService {
         boolean isOwner = albumRepository.isOwner(albumId, userId);
         if (isOwner) {
             albumRepository.deleteById(albumId);
+        } else {
+            throw new ForbiddenException("You do not have access to delete this album");
         }
-        throw new ForbiddenException("You do not have access to delete this album");
     }
 }
