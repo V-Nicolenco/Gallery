@@ -9,5 +9,5 @@ public class SavePhotoDto {
 
     private String data;
     private String description;
-    private boolean isOpen;
+    private boolean isPublic;
 }

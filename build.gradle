@@ -13,8 +13,10 @@ subprojects {
     dependencies {
         implementation platform("org.springframework.boot:spring-boot-dependencies:2.3.5.RELEASE")
 
+        implementation 'org.mapstruct:mapstruct:1.4.1.Final'
+        annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.1.Final'
+
         compileOnly "org.springframework.boot:spring-boot-starter"
-        implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
         compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
