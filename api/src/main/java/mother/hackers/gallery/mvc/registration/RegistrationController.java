@@ -51,7 +51,7 @@ public class RegistrationController {
         encodePassword(registrationDto);
         userService.createNewUser(registrationDto);
         Authentication authenticationToken =
-                new UsernamePasswordAuthenticationToken(registrationDto.getEmail(), registrationDto.getPasswordHash());
+                new UsernamePasswordAuthenticationToken(registrationDto.getEmail(), registrationDto.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         return "redirect:/index";
     }
@@ -69,7 +69,7 @@ public class RegistrationController {
     }
 
     private void encodePassword(RegistrationUserDto registrationDto) {
-        String encodedPassword = encoder.encode(registrationDto.getPasswordHash());
-        registrationDto.setPasswordHash(encodedPassword);
+        String encodedPassword = encoder.encode(registrationDto.getPassword());
+        registrationDto.setPassword(encodedPassword);
     }
 }

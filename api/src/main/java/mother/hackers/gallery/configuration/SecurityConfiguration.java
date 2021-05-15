@@ -1,5 +1,6 @@
-package mother.hackers.gallery.security;
+package mother.hackers.gallery.configuration;
 
+import mother.hackers.gallery.security.AuthenticationService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

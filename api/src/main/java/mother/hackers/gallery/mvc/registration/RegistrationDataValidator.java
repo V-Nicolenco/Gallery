@@ -44,7 +44,7 @@ public class RegistrationDataValidator implements Validator {
             if (userRepository.findUserByEmail(reg.getEmail()).isPresent()) {
                 errors.rejectValue("email", "error.duplicate.email");
             }
-            if (!reg.getPasswordHash().equals(reg.getConfirmPasswordHash())) {
+            if (!reg.getPassword().equals(reg.getConfirmPassword())) {
                 errors.rejectValue("confirmPassword", "error.match.password");
             }
         } else {

@@ -1,0 +1,14 @@
+th, td {
+    padding: 5px;
+}
+td span  {
+    font-size:90%;
+    font-style: italic;
+    color: red;
+}
+.error {
+    background-color: darksalmon;
+    border-radius: 10px;
+    color: red;
+    font-style: italic;
+}
