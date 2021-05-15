@@ -10,11 +10,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
+@Table(name = "albums")
 public class Album {
 
     @Id
