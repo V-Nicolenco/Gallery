@@ -20,7 +20,7 @@ public class User {
     private long id;
     private String email;
     private String passwordHash;
-    private Role role;
+    private Role role = Role.USER;
     private String firstName;
     private String lastName;
 }
