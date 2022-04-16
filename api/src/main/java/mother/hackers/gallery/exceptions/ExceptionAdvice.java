@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -27,6 +28,14 @@ public class ExceptionAdvice {
     public ErrorDto handle(ForbiddenException e) {
         String message = e.getMessage();
         logger.error(message, e);
+        return new ErrorDto(message);
+    }
+
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ErrorDto handle(IllegalArgumentException e) {
+        String message = e.getMessage();
+        logger.warn(message, e);
         return new ErrorDto(message);
     }
 }

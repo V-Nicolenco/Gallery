@@ -8,6 +8,7 @@ import mother.hackers.gallery.exceptions.NotFoundException;
 import mother.hackers.gallery.photo.PhotoRepository;
 import org.springframework.stereotype.Component;
 
+// ToDo all of these checks must be done before they go to the controller
 @Component
 public class CommentValidator {
 
@@ -15,29 +16,29 @@ public class CommentValidator {
     private final PhotoRepository photoRepository;
     private final CommentRepository commentRepository;
 
-    public CommentValidator(AlbumRepository albumRepository, PhotoRepository photoRepository, CommentRepository commentRepository) {
+    CommentValidator(AlbumRepository albumRepository, PhotoRepository photoRepository, CommentRepository commentRepository) {
         this.albumRepository = albumRepository;
         this.photoRepository = photoRepository;
         this.commentRepository = commentRepository;
     }
 
-    public void addComment(long albumId, long photoId, CreateCommentDto dto) {
+    void addComment(long albumId, long photoId, CreateCommentDto dto) {
         if (!albumRepository.existsById(albumId)) throw new NotFoundException("Album not found");
         if (!albumRepository.isPublic(albumId)) throw new ForbiddenException("Album is private");
 
         if (!photoRepository.existsById(photoId)) throw new NotFoundException("Photo not found");
         if (photoRepository.isCommentsClosed(photoId)) throw  new ForbiddenException("Comments is closed");
 
-        if (dto.getText().isBlank()) throw new ForbiddenException("You cannot save empty comment");
+        if (dto.getText().isBlank()) throw new IllegalArgumentException("You cannot save empty comment");
     }
 
-    public void getAllCommentsByPhotoId(long albumId, long photoId) {
+    void getAllCommentsByPhotoId(long albumId, long photoId) {
         if (!albumRepository.existsById(albumId)) throw new NotFoundException("Album not found");
         if (!photoRepository.existsById(photoId)) throw new NotFoundException("Photo not found");
         if (photoRepository.isCommentsClosed(photoId)) throw  new ForbiddenException("Comments is closed");
     }
 
-    public void validateEditComment(long albumId, long photoId, long commentId, EditCommentDto dto, long userId) {
+    void validateEditComment(long albumId, long photoId, long commentId, EditCommentDto dto, long userId) {
         if (!albumRepository.existsById(albumId)) throw new NotFoundException("Album not found");
         if (!albumRepository.isPublic(albumId)) throw new ForbiddenException("Album is private");
 
@@ -50,7 +51,7 @@ public class CommentValidator {
         if (dto.getText().isBlank()) throw new ForbiddenException("You cannot save empty comment");
     }
 
-    public void validateDeleteComment(long albumId, long photoId, long commentId, long userId) {
+    void validateDeleteComment(long albumId, long photoId, long commentId, long userId) {
         if (!albumRepository.existsById(albumId)) throw new NotFoundException("Album not found");
         if (!photoRepository.existsById(photoId)) throw new NotFoundException("Photo not found");
         if (!commentRepository.existsById(commentId)) throw new NotFoundException("Comment already deleted or never existed");
