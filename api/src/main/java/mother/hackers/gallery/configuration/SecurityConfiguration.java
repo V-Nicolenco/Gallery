@@ -29,7 +29,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.headers().frameOptions().disable();
         http.csrf().disable();
-//        http.exceptionHandling().authenticationEntryPoint(new Http403ForbiddenEntryPoint());
 
         http.authorizeRequests()
                 .mvcMatchers("/login", "/registration", "/web-api/login", "/web-api/registration").permitAll()
