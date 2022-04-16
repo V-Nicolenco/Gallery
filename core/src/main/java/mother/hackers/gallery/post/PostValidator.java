@@ -36,7 +36,7 @@ public class PostValidator {
     void validateGetAllPostsByProfileId(long profileId, long userId) {
         if (!profileRepository.existsById(profileId)) throw new NotFoundException("Profile not found");
 
-        if (!profileRepository.isPublic(profileId) || !profileRepository.isOwner(profileId, userId))
+        if (!profileRepository.isPublic(profileId) && !profileRepository.isOwner(profileId, userId))
             throw new ForbiddenException("This profile is private and only owner can see posts in it");
     }
 
