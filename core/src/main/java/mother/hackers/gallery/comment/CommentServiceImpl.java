@@ -50,6 +50,8 @@ public class CommentServiceImpl implements CommentService {
         comment.setAuthor(user);
         comment.setPost(post);
 
+        commentRepository.save(comment);
+
         return mapper.toDto(comment);
     }
 
