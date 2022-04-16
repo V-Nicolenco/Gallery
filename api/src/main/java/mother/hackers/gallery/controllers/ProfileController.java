@@ -65,7 +65,7 @@ public class ProfileController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully return the list of profiles of the authorized user")
     })
-    @GetMapping("/my")
+    @GetMapping("/me")
     public List<ProfileDto> getMyProfiles(@AuthenticationPrincipal AuthenticationUser user) {
         long userId = user.getId();
         return profileService.getMyProfile(userId);

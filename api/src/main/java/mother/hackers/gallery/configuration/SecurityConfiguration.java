@@ -36,7 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/gallery", true)
+                .defaultSuccessUrl("/profiles/me", true)
                 .and()
                 .rememberMe()
                 .tokenValiditySeconds(604800)
