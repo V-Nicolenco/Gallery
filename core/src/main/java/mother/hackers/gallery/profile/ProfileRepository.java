@@ -16,8 +16,8 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
     @Query("SELECT a FROM Profile a WHERE a.isPublic = true")
     List<Profile> findPublicProfiles();
 
-    @Query("SELECT CASE WHEN COUNT(a) > 0 THEN true ELSE false END " +
-            "FROM Profile a WHERE a.id = :profileId and a.owner.id = :userId")
+    @Query("SELECT CASE WHEN a.owner.id = :userId THEN true ELSE false END " +
+            "FROM Profile a WHERE a.id = :profileId")
     boolean isOwner(@Param("profileId") long profileId, @Param("userId") long userId);
 
     @Query("SELECT a.isPublic FROM Profile a WHERE a.id = :profileId")

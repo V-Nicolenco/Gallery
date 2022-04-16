@@ -10,6 +10,6 @@ public class CreateProfileDto {
 
     @ApiModelProperty(notes = "Profile name", example = "Geekhub profile", required = true)
     private String name;
-    @ApiModelProperty(notes = "Profile is public?", required = true)
+    @ApiModelProperty(notes = "Profile is public?", required = true, value = "false")
     private boolean isPublic;
 }

@@ -10,6 +10,6 @@ public class CreatePostDto {
 
     @ApiModelProperty(notes = "Post description that will be added")
     private String description;
-    @ApiModelProperty(notes = "Comments is closed?", required = true)
+    @ApiModelProperty(notes = "Comments is closed?", required = true, value = "false")
     private boolean commentsClosed;
 }
