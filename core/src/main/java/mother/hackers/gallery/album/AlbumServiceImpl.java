@@ -38,7 +38,7 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public AlbumDto getAlbum(long albumId, long userId) {
         Album album = albumRepository.findById(albumId)
-                .orElseThrow(() -> new NotFoundException("Album could not be found"));
+                .orElseThrow(() -> new NotFoundException("Album not found"));
 
         long ownerId = album.getOwner().getId();
 
