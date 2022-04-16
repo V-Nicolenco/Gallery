@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateDescriptionDto {
+public class PhotoDescriptionDto {
 
     private String text;
 }

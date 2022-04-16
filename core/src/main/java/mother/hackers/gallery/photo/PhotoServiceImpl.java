@@ -4,7 +4,7 @@ import mother.hackers.gallery.album.AlbumRepository;
 import mother.hackers.gallery.exceptions.ForbiddenException;
 import mother.hackers.gallery.exceptions.NotFoundException;
 import mother.hackers.gallery.photo.dto.PhotoDto;
-import mother.hackers.gallery.photo.dto.UpdateDescriptionDto;
+import mother.hackers.gallery.photo.dto.PhotoDescriptionDto;
 import mother.hackers.gallery.user.User;
 import mother.hackers.gallery.user.UserRepository;
 import org.springframework.stereotype.Service;
@@ -28,13 +28,14 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     @Override
-    public PhotoDto savePhoto(ImageData data, long userId) {
+    public PhotoDto savePhoto(PhotoDescriptionDto descriptionDto, ImageData data, long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User could not be found"));
 
         Photo newPhoto = new Photo();
         newPhoto.setData(data);
         newPhoto.setAuthor(user);
+        newPhoto.setDescription(descriptionDto.getText());
         Photo savedPhoto = photoRepository.save(newPhoto);
 
         return mapper.toDto(savedPhoto);
@@ -71,7 +72,7 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     @Override
-    public PhotoDto updateDescription(UpdateDescriptionDto description, long photoId, long userId) {
+    public PhotoDto updateDescription(PhotoDescriptionDto description, long photoId, long userId) {
         Photo photo = photoRepository.findById(photoId)
                 .orElseThrow(() -> new NotFoundException("Photo could not be found"));
 

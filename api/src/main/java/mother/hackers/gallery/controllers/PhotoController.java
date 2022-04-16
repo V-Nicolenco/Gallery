@@ -3,7 +3,7 @@ package mother.hackers.gallery.controllers;
 import mother.hackers.gallery.photo.PhotoService;
 import mother.hackers.gallery.photo.ImageData;
 import mother.hackers.gallery.photo.dto.PhotoDto;
-import mother.hackers.gallery.photo.dto.UpdateDescriptionDto;
+import mother.hackers.gallery.photo.dto.PhotoDescriptionDto;
 import mother.hackers.gallery.security.AuthenticationUser;
 import mother.hackers.gallery.utils.MultipartFileUtils;
 import org.springframework.http.MediaType;
@@ -32,10 +32,11 @@ public class PhotoController {
     }
 
     @PutMapping
-    public PhotoDto savePhoto(@RequestBody MultipartFile file,
+    public PhotoDto savePhoto(@RequestBody PhotoDescriptionDto descriptionDto,
+                              @RequestParam("photo") MultipartFile file,
                               @AuthenticationPrincipal AuthenticationUser user) {
-        ImageData data = MultipartFileUtils.getData(file);
-        return photoService.savePhoto(data, user.getId());
+        ImageData imageData = MultipartFileUtils.getData(file);
+        return photoService.savePhoto(descriptionDto, imageData, user.getId());
     }
 
     @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
@@ -59,7 +60,7 @@ public class PhotoController {
 
     @PostMapping("/{photoId}/update-description")
     public PhotoDto changePhotoDescription(@PathVariable("photoId") long photoId,
-                                           @RequestBody UpdateDescriptionDto dto,
+                                           @RequestBody PhotoDescriptionDto dto,
                                            @AuthenticationPrincipal AuthenticationUser user) {
         return photoService.updateDescription(dto, photoId, user.getId());
     }
