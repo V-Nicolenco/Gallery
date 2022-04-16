@@ -53,10 +53,10 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public List<ProfileDto> getMyProfile(long userId) {
-        return profileRepository.findProfilesByUserId(userId).stream()
+    public ProfileDto getProfileByUserId(long userId) {
+        return profileRepository.findProfileByUserId(userId)
                 .map(mapper::toDto)
-                .collect(Collectors.toList());
+                .orElseThrow(() -> new NotFoundException("Profile not found"));
     }
 
     @Override

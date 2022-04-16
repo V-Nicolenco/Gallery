@@ -12,7 +12,7 @@ public interface ProfileService {
 
     ProfileDto getProfile(long profileId, long userId);
 
-    List<ProfileDto> getMyProfile(long userId);
+    ProfileDto getProfileByUserId(long userId);
 
     List<ProfileDto> getPublicProfiles();
 

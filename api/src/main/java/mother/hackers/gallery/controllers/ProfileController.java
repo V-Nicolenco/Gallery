@@ -61,14 +61,14 @@ public class ProfileController {
     }
 
 
-    @ApiOperation(value = "Get a list of profiles of an authorized user")
+    @ApiOperation(value = "Get authorized user profile")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully return the list of profiles of the authorized user")
+            @ApiResponse(code = 200, message = "Successfully return the list of profiles of the authorized user"),
+            @ApiResponse(code = 404, message = "Profile not found", response = ErrorDto.class)
     })
     @GetMapping("/me")
-    public List<ProfileDto> getMyProfiles(@AuthenticationPrincipal AuthenticationUser user) {
-        long userId = user.getId();
-        return profileService.getMyProfile(userId);
+    public ProfileDto getMyProfile(@AuthenticationPrincipal AuthenticationUser user) {
+        return profileService.getProfileByUserId(user.getId());
     }
 
 
