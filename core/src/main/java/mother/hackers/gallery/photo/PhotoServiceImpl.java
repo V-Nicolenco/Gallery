@@ -47,7 +47,7 @@ public class PhotoServiceImpl implements PhotoService {
                 .orElseThrow(() -> new NotFoundException("Photo could not be found"));
 
         long ownerId = photo.getAuthor().getId();
-        if (photo.isPublic() || ownerId == userId) {
+        if (photo.isCommentsClosed() || ownerId == userId) {
             return mapper.toDto(photo);
         } else {
             throw new ForbiddenException("This photo is private and only owner can see this photo");
@@ -56,13 +56,8 @@ public class PhotoServiceImpl implements PhotoService {
 
     @Override
     public List<PhotoDto> getAllByAlbumId(long albumId, long userId) {
-        if (albumRepository.isOwner(albumId, userId)) {
+        if (albumRepository.existsById(albumId) && albumRepository.isPublic(albumId)) {
             return photoRepository.findAllPhotosByAlbumId(albumId)
-                    .stream()
-                    .map(mapper::toDto)
-                    .collect(Collectors.toList());
-        } else if (albumRepository.isPublic(albumId)) {
-            return photoRepository.findAllPublicPhotosByAlbumId(albumId)
                     .stream()
                     .map(mapper::toDto)
                     .collect(Collectors.toList());
@@ -87,13 +82,13 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     @Override
-    public PhotoDto changeOpenStatus(boolean isOpen, long photoId, long userId) {
+    public PhotoDto changeOpenStatus(boolean commentsClosed, long photoId, long userId) {
         Photo photo = photoRepository.findById(photoId)
                 .orElseThrow(() -> new NotFoundException("Photo could not be found"));
 
         long authorId = photo.getAuthor().getId();
         if (authorId == userId) {
-            photo.setPublic(isOpen);
+            photo.setCommentsClosed(commentsClosed);
             Photo updatedPhoto = photoRepository.save(photo);
             return mapper.toDto(updatedPhoto);
         } else {

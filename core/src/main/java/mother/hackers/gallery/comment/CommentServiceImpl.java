@@ -1,5 +1,6 @@
 package mother.hackers.gallery.comment;
 
+import mother.hackers.gallery.album.AlbumRepository;
 import mother.hackers.gallery.comment.dto.CommentDto;
 import mother.hackers.gallery.comment.dto.CreateCommentDto;
 import mother.hackers.gallery.comment.dto.EditCommentDto;
@@ -11,10 +12,7 @@ import mother.hackers.gallery.user.User;
 import mother.hackers.gallery.user.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -22,22 +20,27 @@ public class CommentServiceImpl implements CommentService {
     private static final CommentMapper mapper = CommentMapper.INSTANCE;
 
     private final CommentRepository commentRepository;
+    private final AlbumRepository albumRepository;
     private final PhotoRepository photoRepository;
     private final UserRepository userRepository;
 
+    private final CommentValidator commentValidator;
+
     public CommentServiceImpl(CommentRepository commentRepository,
+                              AlbumRepository albumRepository,
                               PhotoRepository photoRepository,
-                              UserRepository userRepository) {
+                              UserRepository userRepository,
+                              CommentValidator commentValidator) {
         this.commentRepository = commentRepository;
+        this.albumRepository = albumRepository;
         this.photoRepository = photoRepository;
         this.userRepository = userRepository;
+        this.commentValidator = commentValidator;
     }
 
     @Override
-    public CommentDto addComment(CreateCommentDto dto, long photoId, long userId) {
-        if (!photoRepository.isPublic(photoId)) {
-            throw new ForbiddenException("Comments are closed!");
-        }
+    public CommentDto addComment(long albumId, long photoId, CreateCommentDto dto, long userId) {
+        commentValidator.addComment(albumId, photoId, dto);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
@@ -55,42 +58,29 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDto> getAllCommentsByPhotoId(long photoId, long userId) {
-        if (!photoRepository.existsById(photoId)) {
-            throw new NotFoundException("Photo not found");
-        }
-        if (!photoRepository.isPublic(photoId)) {
-            throw new ForbiddenException("Comments are closed!");
-        }
+    public List<CommentDto> getAllCommentsByPhotoId(long albumId, long photoId) {
+        commentValidator.getAllCommentsByPhotoId(albumId, photoId);
 
         List<Comment> comments = commentRepository.getCommentsByPhotoId(photoId);
         return mapper.toDto(comments);
     }
 
     @Override
-    public CommentDto editComment(EditCommentDto dto, long photoId, long commentId, long userId) {
-        if (commentRepository.isAuthor(commentId, userId)) {
-            Comment comment = commentRepository.findById(commentId)
-                    .orElseThrow(() -> new NotFoundException("Comment not found!"));
+    public CommentDto editComment(long albumId, long photoId, long commentId, EditCommentDto dto, long userId) {
+        commentValidator.validateEditComment(albumId, photoId, commentId, dto, userId);
 
-            comment.setText(dto.getText());
-            commentRepository.save(comment);
-            return mapper.toDto(comment);
-        } else {
-            throw new ForbiddenException("You do not have access to edit this comment");
-        }
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundException("Comment not found!"));
+
+        comment.setText(dto.getText());
+        commentRepository.save(comment);
+        return mapper.toDto(comment);
     }
 
     @Override
-    public void deleteComment(long photoId, long commentId, long userId) {
-        if (!commentRepository.existsById(commentId)) {
-            throw new NotFoundException("Comment already deleted or never existed");
-        }
+    public void deleteComment(long albumId, long photoId, long commentId, long userId) {
+        commentValidator.validateDeleteComment(albumId, photoId, commentId, userId);
 
-        if (commentRepository.isAuthor(commentId, userId)) {
-            commentRepository.deleteById(commentId);
-        } else {
-            throw new ForbiddenException("You do not have access to delete this comment");
-        }
+        commentRepository.deleteById(commentId);
     }
 }

@@ -26,7 +26,7 @@ public class Photo {
     @OneToOne
     private ImageData data;
     private String description;
-    private boolean isPublic;
+    private boolean commentsClosed;
     @ManyToOne
     private User author;
     @OneToMany

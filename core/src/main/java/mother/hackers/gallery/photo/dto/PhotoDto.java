@@ -14,7 +14,7 @@ public class PhotoDto {
     private long id;
     private ImageData data;
     private String description;
-    private boolean isPublic;
+    private boolean commentsClosed;
     private int authorId;
     private List<CommentDto> comments;
 }

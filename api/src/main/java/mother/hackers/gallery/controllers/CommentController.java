@@ -33,41 +33,42 @@ public class CommentController {
     @ApiOperation(value = "Add comment to photo.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Added comment successfully"),
-            @ApiResponse(code = 403, message = "Comments are closed"),
-            @ApiResponse(code = 404, message = "Photo not found")
+            @ApiResponse(code = 403, message = "You do not have access to comment this photo"),
     })
     @PutMapping
-    public CommentDto addComment(@RequestBody CreateCommentDto dto,
-                                       @PathVariable("photoId") long photoId,
-                                       @AuthenticationPrincipal AuthenticationUser user) {
-        return commentService.addComment(dto, photoId, user.getId());
+    public CommentDto addComment(@PathVariable("albumId") long albumId,
+                                 @PathVariable("photoId") long photoId,
+                                 @RequestBody CreateCommentDto commentDto,
+                                 @AuthenticationPrincipal AuthenticationUser user) {
+        return commentService.addComment(albumId, photoId, commentDto, user.getId());
     }
+
 
     @ApiOperation(value = "Get all comments by photo id.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Return a list of comments"),
-            @ApiResponse(code = 403, message = "Comments are closed"),
-            @ApiResponse(code = 404, message = "Photo not found")
+            @ApiResponse(code = 200, message = "Return a list of comments")
     })
     @GetMapping
-    public List<CommentDto> getCommentsByPhotoId(@PathVariable("photoId") long photoId,
-                                 @AuthenticationPrincipal AuthenticationUser user) {
-        return commentService.getAllCommentsByPhotoId(photoId, user.getId());
+    public List<CommentDto> getCommentsByPhotoId(@PathVariable("albumId") long albumId,
+                                                 @PathVariable("photoId") long photoId) {
+        return commentService.getAllCommentsByPhotoId(albumId, photoId);
     }
+
 
     @ApiOperation(value = "Edit comment")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Edited comment successfully"),
             @ApiResponse(code = 403, message = "You do not have access to edit this comment"),
-            @ApiResponse(code = 404, message = "Comment not found")
     })
     @PostMapping("/{commentId}")
-    public CommentDto editComment(@PathVariable("commentId") long commentId,
-                                        @PathVariable("photoId") long photoId,
-                                        @RequestBody EditCommentDto dto,
-                                        @AuthenticationPrincipal AuthenticationUser user) {
-        return commentService.editComment(dto, photoId, commentId, user.getId());
+    public CommentDto editComment(@PathVariable("albumId") long albumId,
+                                  @PathVariable("commentId") long commentId,
+                                  @PathVariable("photoId") long photoId,
+                                  @RequestBody EditCommentDto commentDto,
+                                  @AuthenticationPrincipal AuthenticationUser user) {
+        return commentService.editComment(albumId, photoId, commentId, commentDto, user.getId());
     }
+
 
     @ApiOperation(value = "Delete comment by its id")
     @ApiResponses(value = {
@@ -76,9 +77,10 @@ public class CommentController {
             @ApiResponse(code = 404, message = "Comment already deleted or never existed")
     })
     @DeleteMapping("/{commentId}")
-    public void deletePhoto(@PathVariable("commentId") long commentId,
-                                        @PathVariable("photoId") long photoId,
-                                        @AuthenticationPrincipal AuthenticationUser user) {
-        commentService.deleteComment(photoId, commentId, user.getId());
+    public void deletePhoto(@PathVariable("albumId") long albumId,
+                            @PathVariable("commentId") long commentId,
+                            @PathVariable("photoId") long photoId,
+                            @AuthenticationPrincipal AuthenticationUser user) {
+        commentService.deleteComment(albumId, photoId, commentId, user.getId());
     }
 }
