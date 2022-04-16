@@ -48,10 +48,7 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = mapper.toEntity(dto);
         comment.setAuthor(user);
-
-        List<Comment> comments = post.getComments();
-        comments.add(comment);
-        postRepository.save(post);
+        comment.setPost(post);
 
         return mapper.toDto(comment);
     }

@@ -14,6 +14,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "FROM Comment c WHERE c.id = :commentId")
     boolean isAuthor(@Param("commentId") long commentId, @Param("userId") long userId);
 
-    @Query("SELECT c FROM Comment c WHERE c.id IN (SELECT p.comments FROM Post p WHERE p.id = :postId)")
+    @Query("SELECT c FROM Comment c WHERE c.post.id = :postId")
     List<Comment> getCommentsByPostId(@Param("postId") long postId);
 }

@@ -2,6 +2,7 @@ package mother.hackers.gallery.comment;
 
 import lombok.Getter;
 import lombok.Setter;
+import mother.hackers.gallery.post.Post;
 import mother.hackers.gallery.user.User;
 
 import javax.persistence.Entity;
@@ -23,4 +24,6 @@ public class Comment {
     @ManyToOne
     private User author;
     private String text;
+    @ManyToOne
+    private Post post;
 }

@@ -3,6 +3,7 @@ package mother.hackers.gallery.post;
 import mother.hackers.gallery.exceptions.NotFoundException;
 import mother.hackers.gallery.post.dto.CreatePostDto;
 import mother.hackers.gallery.post.dto.PostDto;
+import mother.hackers.gallery.profile.Profile;
 import mother.hackers.gallery.profile.ProfileRepository;
 import mother.hackers.gallery.user.User;
 import mother.hackers.gallery.user.UserRepository;
@@ -38,17 +39,16 @@ public class PostServiceImpl implements PostService {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User could not be found"));
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new NotFoundException("Profile could not be found"));
 
         Post newPost = new Post();
         newPost.setAuthor(user);
         newPost.setDescription(createPostDto.getDescription());
         newPost.setCommentsClosed(createPostDto.isCommentsClosed());
-        Post savedPost = postRepository.save(newPost);
+        newPost.setProfile(profile);
 
-        profileRepository.findById(profileId).ifPresent(profile -> {
-            profile.getPosts().add(savedPost);
-            profileRepository.save(profile);
-        });
+        Post savedPost = postRepository.save(newPost);
 
         return mapper.toDto(savedPost);
     }

@@ -3,6 +3,7 @@ package mother.hackers.gallery.post;
 import lombok.Getter;
 import lombok.Setter;
 import mother.hackers.gallery.comment.Comment;
+import mother.hackers.gallery.profile.Profile;
 import mother.hackers.gallery.user.User;
 
 import javax.persistence.Entity;
@@ -27,6 +28,6 @@ public class Post {
     private boolean commentsClosed;
     @ManyToOne
     private User author;
-    @OneToMany
-    private List<Comment> comments;
+    @ManyToOne
+    private Profile profile;
 }

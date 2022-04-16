@@ -26,7 +26,5 @@ public class Profile {
     private String name;
     @ManyToOne
     private User owner;
-    @OneToMany
-    private List<Post> posts;
     private boolean isPublic;
 }
