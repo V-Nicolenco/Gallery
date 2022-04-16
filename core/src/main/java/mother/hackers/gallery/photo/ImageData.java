@@ -1,4 +1,4 @@
-package mother.hackers.gallery.photo.dto;
+package mother.hackers.gallery.photo;
 
 import lombok.Data;
 import javax.persistence.Entity;

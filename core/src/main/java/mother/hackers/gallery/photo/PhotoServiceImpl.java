@@ -3,7 +3,6 @@ package mother.hackers.gallery.photo;
 import mother.hackers.gallery.album.AlbumRepository;
 import mother.hackers.gallery.exceptions.ForbiddenException;
 import mother.hackers.gallery.exceptions.NotFoundException;
-import mother.hackers.gallery.photo.dto.ImageData;
 import mother.hackers.gallery.photo.dto.PhotoDto;
 import mother.hackers.gallery.photo.dto.UpdateDescriptionDto;
 import mother.hackers.gallery.user.User;
@@ -35,7 +34,7 @@ public class PhotoServiceImpl implements PhotoService {
 
         Photo newPhoto = new Photo();
         newPhoto.setData(data);
-        newPhoto.setOwner(user);
+        newPhoto.setAuthor(user);
         Photo savedPhoto = photoRepository.save(newPhoto);
 
         return mapper.toDto(savedPhoto);
@@ -46,7 +45,7 @@ public class PhotoServiceImpl implements PhotoService {
         Photo photo = photoRepository.findById(photoId)
                 .orElseThrow(() -> new NotFoundException("Photo could not be found"));
 
-        long ownerId = photo.getOwner().getId();
+        long ownerId = photo.getAuthor().getId();
         if (photo.isPublic() || ownerId == userId) {
             return mapper.toDto(photo);
         } else {
@@ -76,7 +75,7 @@ public class PhotoServiceImpl implements PhotoService {
         Photo photo = photoRepository.findById(photoId)
                 .orElseThrow(() -> new NotFoundException("Photo could not be found"));
 
-        long ownerId = photo.getOwner().getId();
+        long ownerId = photo.getAuthor().getId();
         if (ownerId == userId) {
             photo.setDescription(description.getText());
             Photo updatedPhoto = photoRepository.save(photo);
@@ -91,13 +90,13 @@ public class PhotoServiceImpl implements PhotoService {
         Photo photo = photoRepository.findById(photoId)
                 .orElseThrow(() -> new NotFoundException("Photo could not be found"));
 
-        long ownerId = photo.getOwner().getId();
-        if (ownerId == userId) {
+        long authorId = photo.getAuthor().getId();
+        if (authorId == userId) {
             photo.setPublic(isOpen);
             Photo updatedPhoto = photoRepository.save(photo);
             return mapper.toDto(updatedPhoto);
         } else {
-            throw new ForbiddenException("Only the owner can change the status of this photo.");
+            throw new ForbiddenException("Only the author can change the status of this photo.");
         }
     }
 

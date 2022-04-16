@@ -1,7 +1,7 @@
 package mother.hackers.gallery.utils;
 
 import mother.hackers.gallery.exceptions.ImageUploadException;
-import mother.hackers.gallery.photo.dto.ImageData;
+import mother.hackers.gallery.photo.ImageData;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

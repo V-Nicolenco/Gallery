@@ -1,7 +1,7 @@
 package mother.hackers.gallery.controllers;
 
 import mother.hackers.gallery.photo.PhotoService;
-import mother.hackers.gallery.photo.dto.ImageData;
+import mother.hackers.gallery.photo.ImageData;
 import mother.hackers.gallery.photo.dto.PhotoDto;
 import mother.hackers.gallery.photo.dto.UpdateDescriptionDto;
 import mother.hackers.gallery.security.AuthenticationUser;

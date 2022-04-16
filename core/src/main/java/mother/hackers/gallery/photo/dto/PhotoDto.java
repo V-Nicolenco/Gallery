@@ -3,7 +3,7 @@ package mother.hackers.gallery.photo.dto;
 import lombok.Getter;
 import lombok.Setter;
 import mother.hackers.gallery.comment.dto.CommentDto;
-import mother.hackers.gallery.user.dto.UserDto;
+import mother.hackers.gallery.photo.ImageData;
 
 import java.util.List;
 
@@ -15,6 +15,6 @@ public class PhotoDto {
     private ImageData data;
     private String description;
     private boolean isPublic;
-    private UserDto owner;
+    private int authorId;
     private List<CommentDto> comments;
 }

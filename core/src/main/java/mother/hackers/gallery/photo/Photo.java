@@ -3,7 +3,6 @@ package mother.hackers.gallery.photo;
 import lombok.Getter;
 import lombok.Setter;
 import mother.hackers.gallery.comment.Comment;
-import mother.hackers.gallery.photo.dto.ImageData;
 import mother.hackers.gallery.user.User;
 
 import javax.persistence.Entity;
@@ -29,7 +28,7 @@ public class Photo {
     private String description;
     private boolean isPublic;
     @ManyToOne
-    private User owner;
+    private User author;
     @OneToMany
     private List<Comment> comments;
 }

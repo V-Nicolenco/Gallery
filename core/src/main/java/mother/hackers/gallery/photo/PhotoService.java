@@ -1,6 +1,5 @@
 package mother.hackers.gallery.photo;
 
-import mother.hackers.gallery.photo.dto.ImageData;
 import mother.hackers.gallery.photo.dto.PhotoDto;
 import mother.hackers.gallery.photo.dto.UpdateDescriptionDto;
 

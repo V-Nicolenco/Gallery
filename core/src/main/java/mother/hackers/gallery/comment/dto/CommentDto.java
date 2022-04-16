@@ -9,6 +9,6 @@ import mother.hackers.gallery.user.dto.UserDto;
 public class CommentDto {
 
     private long id;
-    private UserDto author;
+    private long authorId;
     private String text;
 }

@@ -17,7 +17,7 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
     List<Photo> findAllPublicPhotosByAlbumId(@Param("albumId") long albumId);
 
     @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END " +
-            "FROM Photo p WHERE p.id = :photoId and p.owner.id = :userId")
+            "FROM Photo p WHERE p.id = :photoId and p.author.id = :userId")
     boolean isOwner(@Param("photoId") long photoId, @Param("userId") long userId);
 
     @Query("SELECT p.isPublic FROM Photo p WHERE p.id = :photoId")
