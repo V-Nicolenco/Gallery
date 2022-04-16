@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class EditCommentDto {
 
-    @ApiModelProperty(notes = "Comment text that will be changed", example = "Very nice photo!", required = true)
+    @ApiModelProperty(notes = "Comment text that will be changed", example = "Very nice post!", required = true)
     private String text;
 }

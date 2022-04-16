@@ -10,10 +10,10 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END " +
-            "FROM Comment c WHERE c.id = :commentId and c.author.id = :userId")
+    @Query("SELECT CASE WHEN c.author.id = :userId THEN true ELSE false END " +
+            "FROM Comment c WHERE c.id = :commentId")
     boolean isAuthor(@Param("commentId") long commentId, @Param("userId") long userId);
 
-    @Query("SELECT c FROM Comment c WHERE c.id IN (SELECT p.comments FROM Photo p WHERE p.id = :photoId)")
-    List<Comment> getCommentsByPhotoId(@Param("photoId") long photoId);
+    @Query("SELECT c FROM Comment c WHERE c.id IN (SELECT p.comments FROM Post p WHERE p.id = :postId)")
+    List<Comment> getCommentsByPostId(@Param("postId") long postId);
 }

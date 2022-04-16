@@ -12,7 +12,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
     private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
             "classpath:/resources/", "classpath:/META-INF/resources/", "classpath:/META-INF/resources/webjars/",
-            "classpath:/static/", "classpath:/public/","classpath:/static/js/","classpath:/static/css/"
+            "classpath:/static/", "classpath:/public/", "classpath:/static/js/", "classpath:/static/css/"
     };
 
     @Override

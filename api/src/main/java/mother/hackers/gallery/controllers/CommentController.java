@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/web-api/gallery/albums/{albumId}/photos/{photoId}/comments")
+@RequestMapping("/web-api/profiles/{profileId}/posts/{postId}/comments")
 public class CommentController {
 
     private final CommentService commentService;
@@ -33,30 +32,30 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @ApiOperation(value = "Add comment to photo.")
+    @ApiOperation(value = "Add comment to post.")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Added comment successfully"),
             @ApiResponse(code = 400, message = "Illegal input", response = ErrorDto.class),
-            @ApiResponse(code = 403, message = "You do not have access to comment this photo", response = ErrorDto.class)
+            @ApiResponse(code = 403, message = "You do not have access to comment this post", response = ErrorDto.class)
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public CommentDto addComment(@PathVariable("albumId") long albumId,
-                                 @PathVariable("photoId") long photoId,
+    public CommentDto addComment(@PathVariable("profileId") long profileId,
+                                 @PathVariable("postId") long postId,
                                  @RequestBody CreateCommentDto commentDto,
                                  @AuthenticationPrincipal AuthenticationUser user) {
-        return commentService.addComment(albumId, photoId, commentDto, user.getId());
+        return commentService.addComment(profileId, postId, commentDto, user.getId());
     }
 
 
-    @ApiOperation(value = "Get all comments by photo id.")
+    @ApiOperation(value = "Get all comments by post id.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Return a list of comments")
     })
     @GetMapping
-    public List<CommentDto> getCommentsByPhotoId(@PathVariable("albumId") long albumId,
-                                                 @PathVariable("photoId") long photoId) {
-        return commentService.getAllCommentsByPhotoId(albumId, photoId);
+    public List<CommentDto> getCommentsByPostId(@PathVariable("profileId") long profileId,
+                                                @PathVariable("postId") long postId) {
+        return commentService.getAllCommentsByPostId(profileId, postId);
     }
 
 
@@ -68,12 +67,12 @@ public class CommentController {
             @ApiResponse(code = 404, message = "Not found", response = ErrorDto.class)
     })
     @PostMapping("/{commentId}")
-    public CommentDto editComment(@PathVariable("albumId") long albumId,
+    public CommentDto editComment(@PathVariable("profileId") long profileId,
                                   @PathVariable("commentId") long commentId,
-                                  @PathVariable("photoId") long photoId,
+                                  @PathVariable("postId") long postId,
                                   @RequestBody EditCommentDto commentDto,
                                   @AuthenticationPrincipal AuthenticationUser user) {
-        return commentService.editComment(albumId, photoId, commentId, commentDto, user.getId());
+        return commentService.editComment(profileId, postId, commentId, commentDto, user.getId());
     }
 
 
@@ -84,10 +83,10 @@ public class CommentController {
             @ApiResponse(code = 404, message = "Comment already deleted or never existed", response = ErrorDto.class)
     })
     @DeleteMapping("/{commentId}")
-    public void deletePhoto(@PathVariable("albumId") long albumId,
-                            @PathVariable("commentId") long commentId,
-                            @PathVariable("photoId") long photoId,
-                            @AuthenticationPrincipal AuthenticationUser user) {
-        commentService.deleteComment(albumId, photoId, commentId, user.getId());
+    public void deletePost(@PathVariable("profileId") long profileId,
+                           @PathVariable("commentId") long commentId,
+                           @PathVariable("postId") long postId,
+                           @AuthenticationPrincipal AuthenticationUser user) {
+        commentService.deleteComment(profileId, postId, commentId, user.getId());
     }
 }

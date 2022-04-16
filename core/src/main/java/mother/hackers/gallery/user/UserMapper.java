@@ -14,7 +14,7 @@ public interface UserMapper {
 
     User toEntity(UserDto dto);
 
-    @Mappings(@Mapping(target="passwordHash", source="password"))
+    @Mappings(@Mapping(target = "passwordHash", source = "password"))
     User toEntity(RegistrationUserDto dto);
 
     UserDto toDto(User user);

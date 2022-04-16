@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface CommentService {
 
-    CommentDto addComment(long albumId, long photoId, CreateCommentDto dto, long userId);
+    CommentDto addComment(long profileId, long postId, CreateCommentDto dto, long userId);
 
-    List<CommentDto> getAllCommentsByPhotoId(long albumId, long photoId);
+    List<CommentDto> getAllCommentsByPostId(long profileId, long postId);
 
-    CommentDto editComment(long albumId, long photoId, long commentId, EditCommentDto dto, long userId);
+    CommentDto editComment(long profileId, long postId, long commentId, EditCommentDto dto, long userId);
 
-    void deleteComment(long albumId, long photoId, long commentId, long userId);
+    void deleteComment(long profileId, long postId, long commentId, long userId);
 }

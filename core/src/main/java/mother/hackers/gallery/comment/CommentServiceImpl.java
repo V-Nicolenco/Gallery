@@ -1,13 +1,12 @@
 package mother.hackers.gallery.comment;
 
-import mother.hackers.gallery.album.AlbumRepository;
 import mother.hackers.gallery.comment.dto.CommentDto;
 import mother.hackers.gallery.comment.dto.CreateCommentDto;
 import mother.hackers.gallery.comment.dto.EditCommentDto;
-import mother.hackers.gallery.exceptions.ForbiddenException;
 import mother.hackers.gallery.exceptions.NotFoundException;
-import mother.hackers.gallery.photo.Photo;
-import mother.hackers.gallery.photo.PhotoRepository;
+import mother.hackers.gallery.post.Post;
+import mother.hackers.gallery.post.PostRepository;
+import mother.hackers.gallery.profile.ProfileRepository;
 import mother.hackers.gallery.user.User;
 import mother.hackers.gallery.user.UserRepository;
 import org.springframework.stereotype.Service;
@@ -20,54 +19,54 @@ public class CommentServiceImpl implements CommentService {
     private static final CommentMapper mapper = CommentMapper.INSTANCE;
 
     private final CommentRepository commentRepository;
-    private final AlbumRepository albumRepository;
-    private final PhotoRepository photoRepository;
+    private final ProfileRepository profileRepository;
+    private final PostRepository postRepository;
     private final UserRepository userRepository;
 
     private final CommentValidator commentValidator;
 
     public CommentServiceImpl(CommentRepository commentRepository,
-                              AlbumRepository albumRepository,
-                              PhotoRepository photoRepository,
+                              ProfileRepository profileRepository,
+                              PostRepository postRepository,
                               UserRepository userRepository,
                               CommentValidator commentValidator) {
         this.commentRepository = commentRepository;
-        this.albumRepository = albumRepository;
-        this.photoRepository = photoRepository;
+        this.profileRepository = profileRepository;
+        this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.commentValidator = commentValidator;
     }
 
     @Override
-    public CommentDto addComment(long albumId, long photoId, CreateCommentDto dto, long userId) {
-        commentValidator.addComment(albumId, photoId, dto);
+    public CommentDto addComment(long profileId, long postId, CreateCommentDto dto, long userId) {
+        commentValidator.addComment(profileId, postId, dto);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
-        Photo photo = photoRepository.findById(photoId)
-                .orElseThrow(() -> new NotFoundException("Photo not found"));
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("Post not found"));
 
         Comment comment = mapper.toEntity(dto);
         comment.setAuthor(user);
 
-        List<Comment> comments = photo.getComments();
+        List<Comment> comments = post.getComments();
         comments.add(comment);
-        photoRepository.save(photo);
+        postRepository.save(post);
 
         return mapper.toDto(comment);
     }
 
     @Override
-    public List<CommentDto> getAllCommentsByPhotoId(long albumId, long photoId) {
-        commentValidator.getAllCommentsByPhotoId(albumId, photoId);
+    public List<CommentDto> getAllCommentsByPostId(long profileId, long postId) {
+        commentValidator.getAllCommentsBypostId(profileId, postId);
 
-        List<Comment> comments = commentRepository.getCommentsByPhotoId(photoId);
+        List<Comment> comments = commentRepository.getCommentsByPostId(postId);
         return mapper.toDto(comments);
     }
 
     @Override
-    public CommentDto editComment(long albumId, long photoId, long commentId, EditCommentDto dto, long userId) {
-        commentValidator.validateEditComment(albumId, photoId, commentId, dto, userId);
+    public CommentDto editComment(long profileId, long postId, long commentId, EditCommentDto dto, long userId) {
+        commentValidator.validateEditComment(profileId, postId, commentId, dto, userId);
 
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("Comment not found!"));
@@ -78,8 +77,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteComment(long albumId, long photoId, long commentId, long userId) {
-        commentValidator.validateDeleteComment(albumId, photoId, commentId, userId);
+    public void deleteComment(long profileId, long postId, long commentId, long userId) {
+        commentValidator.validateDeleteComment(profileId, postId, commentId, userId);
 
         commentRepository.deleteById(commentId);
     }

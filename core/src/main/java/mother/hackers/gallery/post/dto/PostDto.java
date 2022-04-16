@@ -1,18 +1,16 @@
-package mother.hackers.gallery.photo.dto;
+package mother.hackers.gallery.post.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 import mother.hackers.gallery.comment.dto.CommentDto;
-import mother.hackers.gallery.photo.ImageData;
 
 import java.util.List;
 
 @Getter
 @Setter
-public class PhotoDto {
+public class PostDto {
 
     private long id;
-    private ImageData data;
     private String description;
     private boolean commentsClosed;
     private int authorId;
