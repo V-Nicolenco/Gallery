@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,9 +34,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDto> addComment(CreateCommentDto dto, long photoId, long userId) {
+    public CommentDto addComment(CreateCommentDto dto, long photoId, long userId) {
         if (!photoRepository.isPublic(photoId)) {
-            throw new NotFoundException("Comments are closed!");
+            throw new ForbiddenException("Comments are closed!");
         }
 
         User user = userRepository.findById(userId)
@@ -50,50 +51,46 @@ public class CommentServiceImpl implements CommentService {
         comments.add(comment);
         photoRepository.save(photo);
 
+        return mapper.toDto(comment);
+    }
+
+    @Override
+    public List<CommentDto> getAllCommentsByPhotoId(long photoId, long userId) {
+        if (!photoRepository.existsById(photoId)) {
+            throw new NotFoundException("Photo not found");
+        }
+        if (!photoRepository.isPublic(photoId)) {
+            throw new ForbiddenException("Comments are closed!");
+        }
+
+        List<Comment> comments = commentRepository.getCommentsByPhotoId(photoId);
         return mapper.toDto(comments);
     }
 
     @Override
-    public List<CommentDto> editComment(EditCommentDto dto, long photoId, long commentId, long userId) {
-        if (!commentRepository.existsById(commentId)) {
-            throw new NotFoundException("Comment not found!");
-        }
-
+    public CommentDto editComment(EditCommentDto dto, long photoId, long commentId, long userId) {
         if (commentRepository.isAuthor(commentId, userId)) {
-            commentRepository.findById(commentId)
-                    .ifPresent(comment -> {
-                        comment.setText(dto.getText());
-                        commentRepository.save(comment);
-                    });
+            Comment comment = commentRepository.findById(commentId)
+                    .orElseThrow(() -> new NotFoundException("Comment not found!"));
 
-            if (photoRepository.isPublic(photoId)) {
-                return commentRepository.getCommentsByPhotoId(photoId)
-                        .stream()
-                        .map(mapper::toDto)
-                        .collect(Collectors.toList());
-            } else {
-                return Collections.emptyList();
-            }
+            comment.setText(dto.getText());
+            commentRepository.save(comment);
+            return mapper.toDto(comment);
         } else {
             throw new ForbiddenException("You do not have access to edit this comment");
         }
     }
 
     @Override
-    public List<CommentDto> deleteComment(long photoId, long commentId, long userId) {
+    public void deleteComment(long photoId, long commentId, long userId) {
+        if (!commentRepository.existsById(commentId)) {
+            throw new NotFoundException("Comment already deleted or never existed");
+        }
+
         if (commentRepository.isAuthor(commentId, userId)) {
             commentRepository.deleteById(commentId);
-
-            if (photoRepository.isPublic(photoId)) {
-                return commentRepository.getCommentsByPhotoId(photoId)
-                        .stream()
-                        .map(mapper::toDto)
-                        .collect(Collectors.toList());
-            } else {
-                return Collections.emptyList();
-            }
         } else {
-            throw new ForbiddenException("You do not have access to edit this comment");
+            throw new ForbiddenException("You do not have access to delete this comment");
         }
     }
 }
