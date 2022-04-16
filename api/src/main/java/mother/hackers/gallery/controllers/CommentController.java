@@ -40,7 +40,7 @@ public class CommentController {
             @ApiResponse(code = 403, message = "You do not have access to comment this photo", response = ErrorDto.class)
     })
     @ResponseStatus(HttpStatus.CREATED)
-    @PutMapping
+    @PostMapping
     public CommentDto addComment(@PathVariable("albumId") long albumId,
                                  @PathVariable("photoId") long photoId,
                                  @RequestBody CreateCommentDto commentDto,
