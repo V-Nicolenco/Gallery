@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    @Query("SELECT p FROM Post p where p.profile.id = :profileId)")
+    @Query("SELECT p FROM Post p where p.profile.id = :profileId")
     List<Post> findAllPostsByProfileId(@Param("profileId") long profileId);
 
     @Query("SELECT CASE WHEN p.author.id = :userId THEN true ELSE false END " +
