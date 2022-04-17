@@ -2,11 +2,17 @@ package mother.hackers.gallery.configuration;
 
 import mother.hackers.gallery.security.AuthenticationService;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
+
+import static org.springframework.web.cors.CorsConfiguration.ALL;
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -31,16 +37,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         http.authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS,"*").permitAll()//allow CORS option calls
                 .mvcMatchers("/login", "/registration", "/web-api/login", "/web-api/registration").permitAll()
                 .anyRequest().authenticated();
+
+        http.cors().configurationSource(request -> configureCors());
 
         http.formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/profiles/me", true)
-                .and()
-                .rememberMe()
-                .tokenValiditySeconds(604800)
-                .rememberMeParameter("remember-me")
                 .and()
                 .logout()
                 .logoutSuccessUrl("/login")
@@ -53,4 +58,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(encoder);
     }
 
+    private CorsConfiguration configureCors() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(List.of("*"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedHeaders(List.of("*"));
+        return corsConfiguration;
+    }
 }

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Controller
 public class LoginController {
 
@@ -34,14 +36,15 @@ public class LoginController {
 
     @PostMapping("/web-api/login")
     public String register(@ModelAttribute("loginForm") @Validated LoginDto login,
-                           BindingResult bindingResult) {
+                           BindingResult bindingResult,
+                           HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
             return "login";
         }
 
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        return "redirect:/gallery";
+        return "redirect:/profiles/me";
     }
 
     @InitBinder
