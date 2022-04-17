@@ -44,6 +44,9 @@ public class LoginController {
 
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+        response.setHeader("Authorization", "token");
+
         return "redirect:/profiles/me";
     }
 

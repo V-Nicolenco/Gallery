@@ -38,7 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS,"*").permitAll()//allow CORS option calls
-                .mvcMatchers("/login", "/registration", "/web-api/login", "/web-api/registration").permitAll()
+                .mvcMatchers("/login", "/registration", "/web-api/login", "/web-api/registration", "/").permitAll()
                 .anyRequest().authenticated();
 
         http.cors().configurationSource(request -> configureCors());
